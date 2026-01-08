@@ -1,0 +1,14 @@
+.projects-badge {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.projects-text {
+  font-weight: 600;
+  color: var(--primary-color);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.3);
+}

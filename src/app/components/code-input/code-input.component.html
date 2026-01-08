@@ -1,0 +1,12 @@
+<div class="code-input">
+  <div class="input-header">
+    <h4></h4>
+    <div>
+      <button pButton icon="pi pi-play" label={{label.girarRuleta}} size="small" [disabled]="!code" (click)="girarRuleta()">
+      </button>
+    </div>
+  </div>
+
+  <textarea pInputTextarea [(ngModel)]="code" (ngModelChange)="onCodeChange($event)" [rows]="15" placeholder={{message.mensajeInstruccionesPegado}} class="w-full">
+  </textarea>
+</div>

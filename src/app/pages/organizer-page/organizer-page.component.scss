@@ -1,0 +1,115 @@
+.organizer-page {
+  min-height: 100vh;
+  background: var(--surface-ground);
+  padding: 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  
+  h1 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 2rem;
+    
+    @media (min-width: 768px) {
+      font-size: 2.5rem;
+    }
+  }
+  
+  p {
+    color: var(--text-color-secondary);
+    margin-top: 0.5rem;
+  }
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  
+  @media (min-width: 992px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+.input-card,
+.options-card,
+.result-card {
+  background: var(--surface-card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  
+  &.input-card {
+    border-left: 4px solid var(--blue-500);
+  }
+  
+  &.options-card {
+    border-left: 4px solid var(--green-500);
+  }
+  
+  &.result-card {
+    border-left: 4px solid var(--purple-500);
+  }
+}
+
+.organize-button {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.875rem !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  border-radius: 8px !important;
+  
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  color: var(--text-color-secondary);
+  
+  ::ng-deep .p-progress-spinner {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
+.page-footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 1.5rem;
+  color: var(--text-color-secondary);
+  border-top: 1px solid var(--surface-border);
+  
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+.w-full {
+  width: 100%;
+}
+
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-4 { margin-top: 1.5rem; }
+.mb-2 { margin-bottom: 0.5rem; }

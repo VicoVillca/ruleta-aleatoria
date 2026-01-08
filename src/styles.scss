@@ -1,0 +1,136 @@
+/* app.component.scss */
+
+/* Variables CSS para temas */
+:root {
+  --primary-color: #3b82f6;
+  --primary-color-dark: #2563eb;
+  --surface-color: #ffffff;
+  --surface-border: #e5e7eb;
+  --text-color: #1f2937;
+  --text-secondary: #6b7280;
+  --background-color: #f9fafb;
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+.dark-theme {
+  --primary-color: #60a5fa;
+  --primary-color-dark: #3b82f6;
+  --surface-color: #1f2937;
+  --surface-border: #374151;
+  --text-color: #f9fafb;
+  --text-secondary: #d1d5db;
+  --background-color: #111827;
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+}
+
+/* Estilos base */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Toolbar */
+.main-toolbar {
+  background-color: var(--surface-color) !important;
+  border-bottom: 1px solid var(--surface-border) !important;
+  box-shadow: var(--shadow);
+  padding: 0.75rem 1.5rem;
+}
+
+.toolbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-icon {
+  font-size: 2rem;
+  color: var(--primary-color);
+}
+
+.logo-text h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.logo-text p {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* Contenido principal */
+.main-content {
+  flex: 1;
+  padding: 1.5rem;
+  background-color: var(--background-color);
+}
+
+/* Footer */
+.main-footer {
+  padding: 1.5rem;
+  text-align: center;
+  background-color: var(--surface-color);
+  border-top: 1px solid var(--surface-border);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.main-footer p {
+  margin: 0;
+}
+
+/* Ajustes para PrimeNG en temas */
+:host ::ng-deep {
+  /* Botones */
+  .p-button {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    
+    &:hover {
+      background: var(--primary-color-dark) !important;
+      border-color: var(--primary-color-dark) !important;
+    }
+    
+    &.p-button-text {
+      background: transparent !important;
+      color: var(--text-color) !important;
+      
+      &:hover {
+        background: rgba(0, 0, 0, 0.04) !important;
+      }
+    }
+  }
+  
+  /* Toolbar */
+  .p-toolbar {
+    background: var(--surface-color) !important;
+    border-color: var(--surface-border) !important;
+    color: var(--text-color) !important;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .toolbar-logo {
+    gap: 0.75rem;
+  }
+  
+  .logo-text h1 {
+    font-size: 1.25rem;
+  }
+  
+  .logo-text p {
+    font-size: 0.75rem;
+  }
+}

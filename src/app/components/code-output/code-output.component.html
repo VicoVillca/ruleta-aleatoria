@@ -1,0 +1,37 @@
+<div class="code-output">
+  <div class="output-header" *ngIf="listaUsuarios">
+    <div class="wheel-container">
+      <canvas #wheelCanvas class="wheel-canvas" width="500" height="500"></canvas>
+    </div>
+  </div>
+
+  <div *ngIf="!listaUsuarios" class="empty-state">
+    <div class="empty-icon">
+      <i class="pi pi-inbox"></i>
+    </div>
+    <p>{{message.mensajeInstrucciones}}</p>
+    <small>Esperando datos para la ruleta...</small>
+  </div>
+
+  <!-- Diálogo del ganador -->
+  <p-dialog 
+    header="🎉 ¡Ganador!" 
+    [(visible)]="showWinner" 
+    [modal]="true"
+    [style]="{ width: '450px' }"
+    [contentStyle]="{ 'padding': '0', 'border-radius': '16px' }"
+    [draggable]="false"
+    [resizable]="false">
+    
+    <div class="winner-dialog-container" *ngIf="winner">
+      <div class="winner-dialog-content">
+        <div class="winner-emoji">🏆</div>
+        
+        <div class="winner-info-section">
+          <div class="winner-color-indicator" [style.backgroundColor]="winner.color"></div>
+          <h3 class="winner-name">{{winner.nombre}}</h3>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

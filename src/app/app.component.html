@@ -1,0 +1,33 @@
+<!-- app.component.html -->
+<div class="app-container" [class.dark-theme]="themeService.isDarkMode" [class.light-theme]="!themeService.isDarkMode">
+  
+  <!-- Toolbar principal -->
+  <p-toolbar styleClass="main-toolbar">
+    <ng-template #start>
+      <div class="toolbar-logo">
+        <div class="logo-text">
+          <h1>{{label.titulo}}</h1>
+          <p class="ml-5">{{label.subTitulo}}</p>
+        </div>
+      </div>
+    </ng-template>
+    
+    <ng-template #end>
+       <div class="projects-badge">
+      <span class="projects-text">Vico-Proyectos</span>
+      <app-theme-toggle></app-theme-toggle>
+    </div>
+    </ng-template>
+  </p-toolbar>
+
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <app-organizer-page></app-organizer-page>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <p>{{label.footer}}</p>
+  </footer>
+
+</div>

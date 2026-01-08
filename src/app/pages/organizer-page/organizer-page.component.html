@@ -1,0 +1,19 @@
+<div class="organizer-page">
+  <div class="grid">
+    <div class="col-12 md:col-3">
+      <div class="card input-card">
+        <app-code-input
+          (codeChange)="onCodeChange($event)" 
+          (onGirarRuleta)="onGirarRuleta()">
+        </app-code-input>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-9">
+      <app-code-output [listaUsuarios]="listaUsuarios" #miHijo></app-code-output>
+    </div>
+  </div>
+
+
+  <p-toast position="top-right"></p-toast>
+</div>
