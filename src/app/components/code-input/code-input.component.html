@@ -1,4 +1,6 @@
 <div class="code-input">
+    <textarea pInputTextarea [(ngModel)]="code" (ngModelChange)="onCodeChange($event)" [rows]="5" placeholder={{message.mensajeInstruccionesPegado}} class="w-full">
+  </textarea>
   <div class="input-header">
     <h4></h4>
     <div>
@@ -7,6 +9,5 @@
     </div>
   </div>
 
-  <textarea pInputTextarea [(ngModel)]="code" (ngModelChange)="onCodeChange($event)" [rows]="15" placeholder={{message.mensajeInstruccionesPegado}} class="w-full">
-  </textarea>
+
 </div>

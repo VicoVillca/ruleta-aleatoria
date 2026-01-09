@@ -16,7 +16,7 @@ import { Dialog } from 'primeng/dialog';
 @Component({
   selector: "app-code-output",
   standalone: true,
-  imports: [CommonModule, ButtonModule,Dialog],
+  imports: [CommonModule, ButtonModule, Dialog],
   templateUrl: "./code-output.component.html",
   styleUrls: ["./code-output.component.scss"],
 })
@@ -41,9 +41,9 @@ export class CodeOutputComponent implements AfterViewInit, OnChanges {
   private soundCooldown = false;
   private audioContext: any;
 
-    showDialog() {
-        this.showWinner = true;
-    }
+  showDialog() {
+    this.showWinner = true;
+  }
 
   ngAfterViewInit(): void {
     this.initializeCanvas();
@@ -66,7 +66,6 @@ export class CodeOutputComponent implements AfterViewInit, OnChanges {
 
   private initializeAudio(): void {
     try {
-      // Inicializar Web Audio API (siempre disponible como fallback)
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext);
     } catch (e) {
       console.log('Web Audio API no disponible');
@@ -77,7 +76,6 @@ export class CodeOutputComponent implements AfterViewInit, OnChanges {
   private playWheelTick(speed: number): void {
     if (!this.isSoundEnabled || this.soundCooldown) return;
     
-    // Usar Web Audio API (siempre funciona, no necesita archivos)
     this.playWebAudioSound(speed);
     
     this.soundCooldown = true;
@@ -94,19 +92,17 @@ export class CodeOutputComponent implements AfterViewInit, OnChanges {
       oscillator.connect(gainNode);
       gainNode.connect(this.audioContext.destination);
       
-      // Ajustar según velocidad
       const baseFreq = 700;
       const freqVariation = speed * 100;
       const frequency = Math.min(1200, baseFreq + freqVariation);
       
-      const duration = 0.04 + (speed * 0.02); // 0.04 a 0.06 segundos
+      const duration = 0.04 + (speed * 0.02);
       const baseVolume = 0.15;
       const volume = Math.min(0.25, baseVolume + (speed * 0.02));
       
       oscillator.frequency.value = frequency;
       oscillator.type = 'sine';
       
-      // Envolvente ADSR rápida
       const now = this.audioContext.currentTime;
       gainNode.gain.setValueAtTime(0, now);
       gainNode.gain.linearRampToValueAtTime(volume, now + 0.005);
@@ -283,7 +279,6 @@ export class CodeOutputComponent implements AfterViewInit, OnChanges {
       this.currentRotation = startRotation + (totalRotationRadians * easeProgress);
       this.drawWheel();
       
-      // DETECTAR CUÁNDO CRUZA UN SEGMENTO
       const currentSegment = this.getCurrentSegment();
       if (currentSegment !== this.lastSegmentCrossed && currentSegment >= 0) {
         const currentSpeed = velocityProfile[Math.min(step, totalSteps - 1)];
@@ -307,11 +302,10 @@ export class CodeOutputComponent implements AfterViewInit, OnChanges {
         this.currentRotation = startRotation + totalRotationRadians;
         this.drawWheel();
         
-        this.detectWinnerFromAngle(finalAngleDegrees);
+        this.detectWinnerFromTotalRotation();
         this.spinning = false;
         this.showWinner = true;
         
-        // Sonido final cuando se detiene
         if (this.isSoundEnabled) {
           setTimeout(() => {
             this.playFinalSound();
@@ -327,14 +321,13 @@ export class CodeOutputComponent implements AfterViewInit, OnChanges {
     if (!this.audioContext) return;
     
     try {
-      // Sonido final más grave y largo
       const oscillator = this.audioContext.createOscillator();
       const gainNode = this.audioContext.createGain();
       
       oscillator.connect(gainNode);
       gainNode.connect(this.audioContext.destination);
       
-      oscillator.frequency.value = 400; // Más grave
+      oscillator.frequency.value = 400;
       oscillator.type = 'sine';
       
       const now = this.audioContext.currentTime;
@@ -350,44 +343,62 @@ export class CodeOutputComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  // Método para detectar en qué segmento está el puntero
-  private getCurrentSegment(): number {
-    if (!this.listaUsuarios?.length) return -1;
+  private detectWinnerFromTotalRotation(): void {
+    if (!this.listaUsuarios?.length) return;
     
-    // Calcular ángulo bajo el puntero (0 a 2π)
-    let angleUnderPointer = -this.currentRotation;
+    let normalizedRotation = this.currentRotation % (2 * Math.PI);
+    if (normalizedRotation < 0) normalizedRotation += 2 * Math.PI;
+    
+    let angleUnderPointer = -normalizedRotation;
     while (angleUnderPointer < 0) angleUnderPointer += 2 * Math.PI;
     while (angleUnderPointer >= 2 * Math.PI) angleUnderPointer -= 2 * Math.PI;
     
     const segmentAngle = (2 * Math.PI) / this.listaUsuarios.length;
-    return Math.floor(angleUnderPointer / segmentAngle);
+    let segmentIndex = Math.floor(angleUnderPointer / segmentAngle);
+    
+    if (segmentIndex >= this.listaUsuarios.length) {
+      segmentIndex = segmentIndex % this.listaUsuarios.length;
+    }
+    
+    const angleDegrees = (angleUnderPointer * 180) / Math.PI;
+    const offsetInSegment = angleUnderPointer % segmentAngle;
+    const offsetDegrees = (offsetInSegment * 180) / Math.PI;
+    
+    console.log(`====== DETECCIÓN DE GANADOR ======`);
+    console.log(`Rotación acumulada: ${this.currentRotation.toFixed(4)} rad`);
+    console.log(`Normalizada: ${normalizedRotation.toFixed(4)} rad`);
+    console.log(`Ángulo bajo puntero: ${angleDegrees.toFixed(1)}°`);
+    console.log(`Segmento calculado: ${segmentIndex}`);
+    console.log(`Offset en segmento: ${offsetDegrees.toFixed(1)}°`);
+    console.log(`Segmentos totales: ${this.listaUsuarios.length}`);
+    
+    if (Math.abs(offsetDegrees) < 0.1 || Math.abs(offsetDegrees - 360/this.listaUsuarios.length) < 0.1) {
+      console.log(`⚠️ Cerca del borde del segmento: ${offsetDegrees.toFixed(2)}°`);
+    }
+    
+    this.winnerIndex = segmentIndex;
+    this.winner = this.listaUsuarios[segmentIndex];
+    
+    console.log(`🎉 GANADOR: ${this.winner.nombre}`);
   }
 
-  private detectWinnerFromAngle(angleDegrees: number): void {
-    if (!this.listaUsuarios?.length) return;
+  private getCurrentSegment(): number {
+    if (!this.listaUsuarios?.length) return -1;
     
-    let normalizedAngle = angleDegrees % 360;
-    if (normalizedAngle < 0) normalizedAngle += 360;
+    let normalizedRotation = this.currentRotation % (2 * Math.PI);
+    if (normalizedRotation < 0) normalizedRotation += 2 * Math.PI;
     
-    const segmentDegrees = 360 / this.listaUsuarios.length;
-    let accumulatedDegrees = 0;
+    let angleUnderPointer = -normalizedRotation;
+    while (angleUnderPointer < 0) angleUnderPointer += 2 * Math.PI;
     
-    for (let i = 0; i < this.listaUsuarios.length; i++) {
-      const segmentEnd = accumulatedDegrees + segmentDegrees;
-      
-      if (normalizedAngle >= accumulatedDegrees && normalizedAngle < segmentEnd) {
-        this.winnerIndex = i;
-        this.winner = this.listaUsuarios[i];
-        return;
-      }
-      
-      accumulatedDegrees = segmentEnd;
+    const segmentAngle = (2 * Math.PI) / this.listaUsuarios.length;
+    let segment = Math.floor(angleUnderPointer / segmentAngle);
+    
+    if (segment >= this.listaUsuarios.length) {
+      segment = segment % this.listaUsuarios.length;
     }
     
-    if (normalizedAngle >= 359.9) {
-      this.winnerIndex = 0;
-      this.winner = this.listaUsuarios[0];
-    }
+    return segment;
   }
 
   private getRandomInt(max: number, min: number = 1): number {
